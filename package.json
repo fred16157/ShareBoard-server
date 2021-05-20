@@ -1,0 +1,16 @@
+{
+  "name": "shareboard-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "강현구 <fred16157@gmail.com>",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "consola": "^2.15.3",
+    "express": "^4.17.1",
+    "socket.io": "2.3.0",
+    "ws": "^7.4.5"
+  }
+}
