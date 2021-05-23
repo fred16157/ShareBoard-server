@@ -30,11 +30,15 @@ io.on('connection', (socket) => {
     })
 
     socket.on('copy-text', (data) => {
-        socket.to(username).broadcast.emit('paste-text', data);
+        socket.to(socket.username).broadcast.emit('paste-text', data);
     });
 
     socket.on('copy-image', (data) => {
-        socket.to(username).broadcast.emit('paste-image', data);
+        socket.to(socket.username).broadcast.emit('paste-image', data);
+    });
+
+    socket.on('disconnect', () => {
+        consola.info('disconnected');
     });
 });
 
