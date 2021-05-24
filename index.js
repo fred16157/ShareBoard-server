@@ -5,6 +5,7 @@ const io = require('socket.io')(server);
 const consola = require('consola');
 const mongoose = require('mongoose');
 const path = require('path');
+const fs = require('fs');
 const crypto = require('crypto');
 const User = require('./models/User');
 const indexRouter = require('./router/index');
@@ -14,10 +15,12 @@ app.use(express.static(path.join(__dirname, './static')));
 
 app.set('view engine', 'ejs');
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({extended: false}));
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);
+
+let { port, mongoUrl, salt, maxFileSize } = require('./config.json');
 
 io.on('connection', (socket) => {
     socket.on('login', async (username, password) => {
@@ -28,7 +31,7 @@ io.on('connection', (socket) => {
         }
         socket.join(user.username);
         socket.username = user.username;
-        socket.emit('login-result', true);
+        socket.emit('login-result', true, maxFileSize);
     })
 
     socket.on('copy-text', (data) => {
@@ -39,12 +42,14 @@ io.on('connection', (socket) => {
         socket.to(socket.username).broadcast.emit('paste-image', data);
     });
 
+    socket.on('copy-file', async (name, data) => {
+        socket.to(socket.username).broadcast.emit('paste-file', name, data);
+    });
+
     socket.on('disconnect', () => {
         consola.info('disconnected');
     });
 });
-
-let { port, mongoUrl, salt } = require('./config.json');
 
 server.listen(port, () => {
     consola.success(`Listening on port ${port}`);

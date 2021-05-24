@@ -1,5 +1,6 @@
 {
     "port": 3000,
     "mongoUrl": "mongodb://localhost",
-    "salt": "sample-salt"
+    "salt": "sample-salt",
+    "maxFileSize": 209715200
 }
