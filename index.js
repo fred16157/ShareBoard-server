@@ -8,6 +8,7 @@ const path = require('path');
 const crypto = require('crypto');
 const User = require('./models/User');
 const indexRouter = require('./router/index');
+const apiRouter = require('./router/api');
 
 app.use(express.static(path.join(__dirname, './static')));
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 io.on('connection', (socket) => {
     socket.on('login', async (username, password) => {
