@@ -35,19 +35,18 @@ io.on('connection', (socket) => {
     })
 
     socket.on('copy-text', (data) => {
+        if(!socket.username) return;
         socket.to(socket.username).broadcast.emit('paste-text', data);
     });
 
     socket.on('copy-image', (data) => {
+        if(!socket.username) return;
         socket.to(socket.username).broadcast.emit('paste-image', data);
     });
 
-    socket.on('copy-file', async (name, data) => {
-        socket.to(socket.username).broadcast.emit('paste-file', name, data);
-    });
-
-    socket.on('disconnect', () => {
-        consola.info('disconnected');
+    socket.on('copy-file', async (name, data, isCompressed) => {
+        if(!socket.username) return;
+        socket.to(socket.username).broadcast.emit('paste-file', name, data, isCompressed);
     });
 });
 
